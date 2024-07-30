@@ -6,23 +6,28 @@ const shortenURLService = async (req, res) => {
   let check;
   let lengthOfK = 5;
   const threshold = 0.9;
+  let maxPossibleShortURLS = Math.pow(62, lengthOfK);
   do {
     const countOfURLS = await ShortURL.aggregate([{ $count: "uniqueCount" }]);
     const uniqueShortURLCount = countOfURLS[0]?.uniqueCount || 0;
-    console.log("uniqueShortURLCount");
-    const maxPossibleShortURLS = Math.pow(62, lengthOfK);
+
     if (uniqueShortURLCount >= maxPossibleShortURLS * threshold) {
       lengthOfK = lengthOfK + 1;
+      maxPossibleShortURLS = Math.pow(62, lengthOfK);
     }
     shortId = shorten(lengthOfK);
     check = await ShortURL.findOne({ shortId: shortId });
   } while (check);
 
   try {
+    const currentDate = new Date();
+    const expirationDate = new Date(currentDate);
+    expirationDate.setMinutes(currentDate.getMinutes() + 5);
     const shortURL = new ShortURL({
       shortId: shortId,
       url: url,
-      createtionDate: new Date(),
+      createtionDate: currentDate,
+      expirationDate: expirationDate
     });
     await shortURL.save();
     return `http://xshort/${shortId}`;
