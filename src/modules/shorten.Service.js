@@ -53,10 +53,10 @@ const retrieveLongURLService = async (req, res) => {
         $set: { lastAccessTime: new Date() },
       }
     );
+    return url;
   } catch (err) {
     console.error(err);
   }
-  return url;
 };
 
 const retrieveStatService = async (req, res) => {
