@@ -2,11 +2,11 @@ const { ShortURL } = require("../db/schemas/URLSchema");
 
 async function checkForExpiredUrls() {
   try {
-    const now  = new Date()
+    const now = new Date();
     const expiredURls = await ShortURL.find({
-        expirationDate: { $lt: now },
+      expirationDate: { $lt: now },
     });
-    console.log('expiredURLs: ',expiredURls)
+    // console.log('expiredURLs: ',expiredURls)
     const expiredIds = expiredURls.map((url) => url._id);
     if (expiredIds || expiredIds.length > 0) {
       await ShortURL.deleteMany({ _id: { $in: expiredIds } });
