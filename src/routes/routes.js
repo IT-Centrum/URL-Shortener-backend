@@ -11,4 +11,6 @@ route.get(
   ShortenController.retrieveLongURL
 );
 
+route.get("/xshort/stat/:shortId", ShortenController.retreiveStat);
+
 module.exports = route;

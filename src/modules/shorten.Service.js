@@ -27,7 +27,7 @@ const shortenURLService = async (req, res) => {
       shortId: shortId,
       url: url,
       createtionDate: currentDate,
-      expirationDate: expirationDate
+      expirationDate: expirationDate,
     });
     await shortURL.save();
     return `http://xshort/${shortId}`;
@@ -38,8 +38,39 @@ const shortenURLService = async (req, res) => {
 
 const retrieveLongURLService = async (req, res) => {
   const { shortId } = req.params;
-  const url = await ShortURL.findOne({ shortId: shortId });
+  const updateOptions = {
+    ip: req.ip,
+    userAgent: req.get("User-Agent"),
+    referrer: req.get("Referrer") || "Direct",
+  };
+
+  try {
+    const url = await ShortURL.findOneAndUpdate(
+      { shortId: shortId },
+      {
+        $push: { usersData: updateOptions },
+        $inc: { accessCount: 1 },
+        $set: { lastAccessTime: new Date() },
+      }
+    );
+  } catch (err) {
+    console.error(err);
+  }
   return url;
+};
+
+const retrieveStatService = async (req, res) => {
+  const { shortId } = req.params;
+  try {
+    const data = await ShortURL.findOne({ shortId: shortId });
+    return {
+      accessCount: data.accessCount,
+      lastAccessTime: data.lastAccessTime,
+      usersData: data.usersData,
+    };
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 function shorten(lengthOfK) {
@@ -59,4 +90,8 @@ function shorten(lengthOfK) {
   return randomId;
 }
 
-module.exports = { shortenURLService, retrieveLongURLService };
+module.exports = {
+  shortenURLService,
+  retrieveLongURLService,
+  retrieveStatService,
+};
