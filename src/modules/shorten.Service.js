@@ -36,7 +36,7 @@ const shortenURLService = async (req, res) => {
   }
 };
 
-const retrieveLongURLService = async (req, res) => {
+const retrieveLongURLService = async (req, res, next) => {
   const { shortId } = req.params;
   const updateOptions = {
     ip: req.ip,
@@ -55,7 +55,7 @@ const retrieveLongURLService = async (req, res) => {
     );
     return url;
   } catch (err) {
-    console.error(err);
+    next(err);
   }
 };
 

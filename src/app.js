@@ -3,12 +3,13 @@ const app = express();
 const routes = require("./routes/routes");
 const db = require("./db/db");
 const { checkForExpiredUrls } = require("../src/scheduled-jobs/scheduler");
+const errorHandler = require("./middlewares/ErrorMiddleware");
 
 const PORT = 3000;
 app.use(express.json());
 app.use(routes);
 setInterval(checkForExpiredUrls, 60000);
-
+app.use(errorHandler);
 db.run()
   .then(() => {
     app.listen(PORT, () => {

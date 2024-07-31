@@ -5,9 +5,13 @@ const shortenURL = async (req, res) => {
   res.json({ url: newShortURL });
 };
 
-const retrieveLongURL = async (req, res) => {
-  const longURL = await ShortenService.retrieveLongURLService(req, res);
-  res.redirect(longURL.url);
+const retrieveLongURL = async (req, res, next) => {
+  try {
+    const longURL = await ShortenService.retrieveLongURLService(req, res, next);
+    res.redirect(longURL.url);
+  } catch (err) {
+    next(err);
+  }
 };
 const retreiveStat = async (req, res) => {
   const stat = await ShortenService.retrieveStatService(req, res);
