@@ -1,3 +1,5 @@
+const APIError = require("../errors/api-errors");
+
 const windowRateLimiter = (options) => {
   const requests = {};
   const { windowMs, maxRequest } = options;
@@ -15,9 +17,7 @@ const windowRateLimiter = (options) => {
     );
 
     if (requests[req.ip].length >= maxRequest) {
-      const error =  new Error('Too many Request! please try again in a minute')
-      error.statusCode = 429;
-      next(error)
+      next(new APIError("Too many Request! please try again in a minute", 429));
     } else {
       requests[req.ip].push(now);
       next();
