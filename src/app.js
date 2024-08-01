@@ -4,8 +4,9 @@ const routes = require("./routes/routes");
 const db = require("./db/db");
 const { checkForExpiredUrls } = require("../src/scheduled-jobs/scheduler");
 const errorHandler = require("./middlewares/ErrorMiddleware");
+require("dotenv").config();
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(routes);
 setInterval(checkForExpiredUrls, 60000);
