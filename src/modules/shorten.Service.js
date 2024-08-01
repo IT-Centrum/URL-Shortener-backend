@@ -1,4 +1,5 @@
 const { ShortURL } = require("../db/schemas/URLSchema");
+const APIError = require("../errors/api-errors");
 const characters = require("../helper/characters");
 const shortenURLService = async (req, res) => {
   const url = req.body.url;
@@ -32,19 +33,18 @@ const shortenURLService = async (req, res) => {
     await shortURL.save();
     return `http://xshort/${shortId}`;
   } catch (err) {
-    console.error(err);
+    throw err;
   }
 };
 
-const retrieveLongURLService = async (req, res, next) => {
-  const { shortId } = req.params;
-  const updateOptions = {
-    ip: req.ip,
-    userAgent: req.get("User-Agent"),
-    referrer: req.get("Referrer") || "Direct",
-  };
-
+const retrieveLongURLService = async (req, res) => {
   try {
+    const { shortId } = req.params;
+    const updateOptions = {
+      ip: req.ip,
+      userAgent: req.get("User-Agent"),
+      referrer: req.get("Referrer") || "Direct",
+    };
     const url = await ShortURL.findOneAndUpdate(
       { shortId: shortId },
       {
@@ -53,23 +53,29 @@ const retrieveLongURLService = async (req, res, next) => {
         $set: { lastAccessTime: new Date() },
       }
     );
+    if (!url) {
+      throw new APIError(`Short URL with id ${shortId} not found`, 404);
+    }
     return url;
   } catch (err) {
-    next(err);
+    throw err;
   }
 };
 
 const retrieveStatService = async (req, res) => {
-  const { shortId } = req.params;
   try {
+    const { shortId } = req.params;
     const data = await ShortURL.findOne({ shortId: shortId });
+    if (!data) {
+      throw new APIError(`Short URL with id ${shortId} not found`, 404);
+    }
     return {
       accessCount: data.accessCount,
       lastAccessTime: data.lastAccessTime,
       usersData: data.usersData,
     };
   } catch (err) {
-    console.error(err);
+    throw err;
   }
 };
 

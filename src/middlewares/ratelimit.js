@@ -15,9 +15,9 @@ const windowRateLimiter = (options) => {
     );
 
     if (requests[req.ip].length >= maxRequest) {
-      res
-        .status(429)
-        .send("Request limit exceeded, please try again in a minute.");
+      const error =  new Error('Too many Request! please try again in a minute')
+      error.statusCode = 429;
+      next(error)
     } else {
       requests[req.ip].push(now);
       next();
