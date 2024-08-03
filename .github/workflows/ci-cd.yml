@@ -36,5 +36,5 @@ jobs:
         run: docker rum -f nodejs-app-container
 
       - name: Run docker container
-        run: docker run -d -p ${{env.DOCKER_PORT}}:${{env.DOCKER_PORT}} -name nodejs-app-container url-shortner-backend
+        run: docker run -d -p ${{ env.DOCKER_PORT }}:${{ env.DOCKER_PORT }} -name nodejs-app-container url-shortner-backend
       
