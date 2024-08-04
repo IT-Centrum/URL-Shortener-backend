@@ -30,7 +30,7 @@ jobs:
 
     steps:
       - name: Pull image from docker hub
-        run: docker pull url-shortner-backend:latest
+        run: docker pull ${{ secrets.DOCKER_USERNAME }}/url-shortner-backend:latest
 
       - name: Delete old container
         run: docker rum -f nodejs-app-container
