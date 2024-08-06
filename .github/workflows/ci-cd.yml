@@ -29,12 +29,15 @@ jobs:
     runs-on: [aws-ec2]
 
     steps:
-      - name: Pull image from docker hub
+      - name: Pull Docker image from Docker Hub
         run: docker pull ${{ secrets.DOCKER_USERNAME }}/url-shortner-backend:latest
 
-      - name: Delete old container
-        run: docker rum -f nodejs-app-container
+      - name: Stop and remove old container (if exists)
+        run: |
+          docker stop nodejs-app-container || true
+          docker rm nodejs-app-container || true
 
-      - name: Run docker container
-        run: docker run -d -p ${{ env.DOCKER_PORT }}:${{ env.DOCKER_PORT }} -name nodejs-app-container url-shortner-backend
+      - name: Run Docker container
+        run: |
+          docker run -d -p ${{ secrets.DOCKER_PORT }}:${{ secrets.DOCKER_PORT }} --name nodejs-app-container ${{ secrets.DOCKER_USERNAME }}/url-shortner-backend:latest
       
