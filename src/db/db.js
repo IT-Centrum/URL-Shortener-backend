@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
-const uri = `mongodb+srv://${process.env.USERNAME}:${process.env.PASSWORD}@cluster0.hfijhsy.mongodb.net/?appName=Cluster0`;
+const uri = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0.hfijhsy.mongodb.net/?appName=Cluster0`;
 
 const clientOptions = {
   serverApi: { version: "1", strict: true, deprecationErrors: true },
