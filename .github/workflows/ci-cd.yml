@@ -39,5 +39,5 @@ jobs:
 
       - name: Run Docker container
         run: |
-          docker run -d -p ${{ secrets.DOCKER_PORT }}:${{ secrets.DOCKER_PORT }} --name nodejs-app-container ${{ secrets.DOCKER_USERNAME }}/url-shortner-backend:latest
+          docker run -d -p ${{ env.DOCKER_PORT }}:${{ env.DOCKER_PORT }} --name nodejs-app-container ${{ secrets.DOCKER_USERNAME }}/url-shortner-backend:latest
       
