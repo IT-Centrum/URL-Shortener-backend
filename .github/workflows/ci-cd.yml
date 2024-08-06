@@ -29,6 +29,11 @@ jobs:
     runs-on: [aws-ec2]
 
     steps:
+      - name: Log in to Docker Hub
+        env: 
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_ACCESS_TOKEN: ${{ secrets.DOCKER_PASSWORD }}
+        run: echo $DOCKER_ACCESS_TOKEN | docker login -u $DOCKER_USERNAME --password-stdin
       - name: Pull Docker image from Docker Hub
         run: docker pull ${{ secrets.DOCKER_USERNAME }}/url-shortner-backend:latest
 
