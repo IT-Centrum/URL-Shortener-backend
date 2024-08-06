@@ -33,7 +33,7 @@ jobs:
         env: 
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_ACCESS_TOKEN: ${{ secrets.DOCKER_PASSWORD }}
-          ONGO_USER: ${{ secrets.MONGO_USER }}
+          MONGO_USER: ${{ secrets.MONGO_USER }}
           MONGO_PASS: ${{ secrets.MONGO_PASS }}
           JWTSECRET: ${{ secrets.JWTSECRET }}
         run: echo $DOCKER_ACCESS_TOKEN | docker login -u $DOCKER_USERNAME --password-stdin
@@ -49,10 +49,10 @@ jobs:
       - name: Run Docker container
         run: |
           docker run -d \
-            -e MONGO_USER=${{ env.MONGO_USER }} \
-            -e MONGO_PASS=${{ env.MONGO_PASS }} \
-            -e JWTSECRET=${{ env.JWTSECRET }} \
-            -p ${{ env.DOCKER_PORT }}:${{ env.DOCKER_PORT }} \
+            -e MONGO_USER=$MONGO_USER \
+            -e MONGO_PASS=$MONGO_PASS \
+            -e JWTSECRET=$JWTSECRET \
+            -p $DOCKER_PORT:$DOCKER_PORT \
             --name nodejs-app-container \
-            ${{ env.DOCKER_USERNAME }}/url-shortner-backend:latest
+            $DOCKER_USERNAME/url-shortner-backend:latest
       
