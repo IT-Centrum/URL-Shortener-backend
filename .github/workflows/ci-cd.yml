@@ -34,6 +34,7 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_ACCESS_TOKEN: ${{ secrets.DOCKER_PASSWORD }}
         run: echo $DOCKER_ACCESS_TOKEN | docker login -u $DOCKER_USERNAME --password-stdin
+
       - name: Pull Docker image from Docker Hub
         run: docker pull ${{ secrets.DOCKER_USERNAME }}/url-shortner-backend:latest
 
@@ -41,7 +42,10 @@ jobs:
         run: |
           docker stop nodejs-app-container || true
           docker rm nodejs-app-container || true
-
+          
+      - name: Print Docker Port
+        run: echo ${{ env.DOCKER_PORT }}
+        
       - name: Run Docker container
         run: |
           docker run -d -p ${{ env.DOCKER_PORT }}:${{ env.DOCKER_PORT }} --name nodejs-app-container ${{ secrets.DOCKER_USERNAME }}/url-shortner-backend:latest
