@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "start": "nodemon ./src/app"
+    "start": "nodemon ./src/app",
+    "test": "jest"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
