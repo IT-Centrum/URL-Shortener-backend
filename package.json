@@ -1,4 +1,9 @@
 {
+  "name": "url-shortner",
+  "version": "1.0.0",
+  "description": "shortens long urls",
+  "author": "Haigaz Soghomonian",
+  "license": "MIT",
   "scripts": {
     "start": "nodemon ./src/app",
     "test": "jest"
