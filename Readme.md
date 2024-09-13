@@ -9,7 +9,7 @@ To get started, clone the repository, configure your environment variables and s
 ```bash
 git clone <repository-url>
 cd <repository-directory>
-npm instal
+npm install
 npm start
 
 ```
